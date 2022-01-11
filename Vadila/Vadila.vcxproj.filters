@@ -18,9 +18,15 @@
     <ClCompile Include="LotoUI.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Gamers.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LotoUI.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Gamers.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

@@ -5,6 +5,8 @@
 #include <random>
 #include <string>
 #include <numeric>
+
+#include "Gamers.h"
 //#include <vector>
 
 // = { { {"1","1","1","1","1","1","1","1","1"}, {1,1,1,1,1,1,1,1,1}, {1,1,1,1,1,1,1,1,1} } };
@@ -31,14 +33,25 @@ namespace Vadila {
 	/// </summary>
 	public ref class LotoUI : public System::Windows::Forms::Form
 	{
-	public:
+	private: array<bool>^ valid;
+	private: array<String^>^ nicks;
+	private: array<unsigned>^ kvs = gcnew array<unsigned>(6);
 
+	private: void reshuffle() {
+		numbers_t.fill(0);
+		std::mt19937 gen(std::random_device{}());
+		std::iota(numbers_t.begin(), numbers_t.end(), 1);
+		std::shuffle(numbers_t.begin(), numbers_t.end(), gen);
+		next = numbers_t.begin();
+	}
+	public:
 		LotoUI(void)
 		{
-			std::mt19937 gen(std::random_device{}());
+			/*std::mt19937 gen(std::random_device{}());
 			std::iota(numbers_t.begin(), numbers_t.end(), 1);
 			std::shuffle(numbers_t.begin(), numbers_t.end(), gen);
-			next = numbers_t.begin();
+			next = numbers_t.begin();*/
+			reshuffle();
 			InitializeComponent();
 			//
 			//TODO: добавьте код конструктора
@@ -133,6 +146,10 @@ namespace Vadila {
 	private: System::Windows::Forms::Timer^ timer2;
 private: System::Windows::Forms::CheckBox^ checkBox1;
 private: System::Windows::Forms::Label^ label9;
+private: System::Windows::Forms::Label^ label10;
+private: System::Windows::Forms::Label^ label11;
+
+
 private: System::ComponentModel::IContainer^ components;
 
 
@@ -230,6 +247,8 @@ private: System::ComponentModel::IContainer^ components;
 			this->timer2 = (gcnew System::Windows::Forms::Timer(this->components));
 			this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
 			this->label9 = (gcnew System::Windows::Forms::Label());
+			this->label10 = (gcnew System::Windows::Forms::Label());
+			this->label11 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView2))->BeginInit();
@@ -247,7 +266,7 @@ private: System::ComponentModel::IContainer^ components;
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(706, 24);
+			this->menuStrip1->Size = System::Drawing::Size(874, 24);
 			this->menuStrip1->TabIndex = 0;
 			this->menuStrip1->Text = L"menuStrip1";
 			// 
@@ -267,6 +286,7 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// dataGridView1
 			// 
+			this->dataGridView1->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->dataGridView1->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->dataGridView1->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
@@ -277,7 +297,7 @@ private: System::ComponentModel::IContainer^ components;
 			});
 			this->dataGridView1->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
 			this->dataGridView1->GridColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->dataGridView1->Location = System::Drawing::Point(128, 123);
+			this->dataGridView1->Location = System::Drawing::Point(111, 123);
 			this->dataGridView1->Name = L"dataGridView1";
 			this->dataGridView1->RowHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView1->RowHeadersVisible = false;
@@ -354,6 +374,7 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// dataGridView2
 			// 
+			this->dataGridView2->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->dataGridView2->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->dataGridView2->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView2->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
@@ -365,7 +386,7 @@ private: System::ComponentModel::IContainer^ components;
 			});
 			this->dataGridView2->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
 			this->dataGridView2->GridColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->dataGridView2->Location = System::Drawing::Point(39, 213);
+			this->dataGridView2->Location = System::Drawing::Point(22, 234);
 			this->dataGridView2->Name = L"dataGridView2";
 			this->dataGridView2->RowHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView2->RowHeadersVisible = false;
@@ -442,6 +463,7 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// dataGridView3
 			// 
+			this->dataGridView3->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->dataGridView3->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->dataGridView3->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView3->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
@@ -453,7 +475,7 @@ private: System::ComponentModel::IContainer^ components;
 			});
 			this->dataGridView3->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
 			this->dataGridView3->GridColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->dataGridView3->Location = System::Drawing::Point(128, 316);
+			this->dataGridView3->Location = System::Drawing::Point(111, 339);
 			this->dataGridView3->Name = L"dataGridView3";
 			this->dataGridView3->RowHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView3->RowHeadersVisible = false;
@@ -530,6 +552,7 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// dataGridView4
 			// 
+			this->dataGridView4->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->dataGridView4->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->dataGridView4->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView4->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
@@ -541,7 +564,7 @@ private: System::ComponentModel::IContainer^ components;
 			});
 			this->dataGridView4->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
 			this->dataGridView4->GridColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->dataGridView4->Location = System::Drawing::Point(368, 316);
+			this->dataGridView4->Location = System::Drawing::Point(542, 339);
 			this->dataGridView4->Name = L"dataGridView4";
 			this->dataGridView4->RowHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView4->RowHeadersVisible = false;
@@ -618,6 +641,7 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// dataGridView5
 			// 
+			this->dataGridView5->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->dataGridView5->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->dataGridView5->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView5->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
@@ -629,7 +653,7 @@ private: System::ComponentModel::IContainer^ components;
 			});
 			this->dataGridView5->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
 			this->dataGridView5->GridColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->dataGridView5->Location = System::Drawing::Point(465, 213);
+			this->dataGridView5->Location = System::Drawing::Point(634, 234);
 			this->dataGridView5->Name = L"dataGridView5";
 			this->dataGridView5->RowHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView5->RowHeadersVisible = false;
@@ -706,6 +730,7 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// dataGridView6
 			// 
+			this->dataGridView6->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->dataGridView6->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->dataGridView6->ColumnHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView6->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
@@ -717,7 +742,7 @@ private: System::ComponentModel::IContainer^ components;
 			});
 			this->dataGridView6->EditMode = System::Windows::Forms::DataGridViewEditMode::EditProgrammatically;
 			this->dataGridView6->GridColor = System::Drawing::SystemColors::ControlDarkDark;
-			this->dataGridView6->Location = System::Drawing::Point(368, 123);
+			this->dataGridView6->Location = System::Drawing::Point(542, 123);
 			this->dataGridView6->Name = L"dataGridView6";
 			this->dataGridView6->RowHeadersBorderStyle = System::Windows::Forms::DataGridViewHeaderBorderStyle::Single;
 			this->dataGridView6->RowHeadersVisible = false;
@@ -794,14 +819,12 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// label1
 			// 
-			this->label1->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
-				| System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
+			this->label1->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Arial Black", 30, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label1->Location = System::Drawing::Point(299, 213);
+			this->label1->Location = System::Drawing::Point(371, 213);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(79, 56);
+			this->label1->Size = System::Drawing::Size(91, 63);
 			this->label1->TabIndex = 12;
 			this->label1->Text = L"1";
 			this->label1->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
@@ -809,16 +832,14 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// label2
 			// 
-			this->label2->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
-				| System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
+			this->label2->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->label2->AutoSize = true;
 			this->label2->BackColor = System::Drawing::Color::Green;
 			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
-			this->label2->Location = System::Drawing::Point(286, 55);
+			this->label2->Location = System::Drawing::Point(370, 59);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(92, 31);
 			this->label2->TabIndex = 13;
@@ -827,10 +848,11 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// label3
 			// 
+			this->label3->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->label3->AutoSize = true;
 			this->label3->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label3->Location = System::Drawing::Point(125, 96);
+			this->label3->Location = System::Drawing::Point(108, 96);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(83, 25);
 			this->label3->TabIndex = 14;
@@ -839,10 +861,11 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// label4
 			// 
+			this->label4->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->label4->AutoSize = true;
 			this->label4->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label4->Location = System::Drawing::Point(36, 186);
+			this->label4->Location = System::Drawing::Point(38, 207);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(83, 25);
 			this->label4->TabIndex = 15;
@@ -851,7 +874,8 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(295, 272);
+			this->button1->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->button1->Location = System::Drawing::Point(367, 279);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(95, 23);
 			this->button1->TabIndex = 16;
@@ -862,10 +886,11 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// label5
 			// 
+			this->label5->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->label5->AutoSize = true;
 			this->label5->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label5->Location = System::Drawing::Point(125, 289);
+			this->label5->Location = System::Drawing::Point(106, 311);
 			this->label5->Name = L"label5";
 			this->label5->Size = System::Drawing::Size(83, 25);
 			this->label5->TabIndex = 17;
@@ -874,10 +899,11 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// label6
 			// 
+			this->label6->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->label6->AutoSize = true;
 			this->label6->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label6->Location = System::Drawing::Point(475, 288);
+			this->label6->Location = System::Drawing::Point(649, 311);
 			this->label6->Name = L"label6";
 			this->label6->Size = System::Drawing::Size(83, 25);
 			this->label6->TabIndex = 18;
@@ -886,10 +912,11 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// label7
 			// 
+			this->label7->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->label7->AutoSize = true;
 			this->label7->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label7->Location = System::Drawing::Point(572, 185);
+			this->label7->Location = System::Drawing::Point(741, 206);
 			this->label7->Name = L"label7";
 			this->label7->Size = System::Drawing::Size(83, 25);
 			this->label7->TabIndex = 19;
@@ -898,10 +925,11 @@ private: System::ComponentModel::IContainer^ components;
 			// 
 			// label8
 			// 
+			this->label8->Anchor = System::Windows::Forms::AnchorStyles::None;
 			this->label8->AutoSize = true;
 			this->label8->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label8->Location = System::Drawing::Point(475, 95);
+			this->label8->Location = System::Drawing::Point(649, 95);
 			this->label8->Name = L"label8";
 			this->label8->Size = System::Drawing::Size(83, 25);
 			this->label8->TabIndex = 20;
@@ -920,37 +948,65 @@ private: System::ComponentModel::IContainer^ components;
 				static_cast<System::Byte>(204)));
 			this->checkBox1->Location = System::Drawing::Point(12, 27);
 			this->checkBox1->Name = L"checkBox1";
-			this->checkBox1->Size = System::Drawing::Size(224, 28);
+			this->checkBox1->Size = System::Drawing::Size(152, 28);
 			this->checkBox1->TabIndex = 21;
-			this->checkBox1->Text = L"Автоматическая игра";
+			this->checkBox1->Text = L"Быстрая игра";
 			this->checkBox1->UseVisualStyleBackColor = true;
 			this->checkBox1->Visible = false;
 			this->checkBox1->CheckedChanged += gcnew System::EventHandler(this, &LotoUI::checkBox1_CheckedChanged);
 			// 
 			// label9
 			// 
-			this->label9->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
-				| System::Windows::Forms::AnchorStyles::Left)
-				| System::Windows::Forms::AnchorStyles::Right));
+			this->label9->Anchor = System::Windows::Forms::AnchorStyles::Bottom;
 			this->label9->AutoSize = true;
 			this->label9->BackColor = System::Drawing::Color::Green;
 			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->label9->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
 				static_cast<System::Int32>(static_cast<System::Byte>(0)));
-			this->label9->Location = System::Drawing::Point(237, 394);
+			this->label9->Location = System::Drawing::Point(339, 461);
 			this->label9->Name = L"label9";
 			this->label9->Size = System::Drawing::Size(141, 31);
 			this->label9->TabIndex = 22;
 			this->label9->Text = L"Квартира";
 			this->label9->Visible = false;
 			// 
+			// label10
+			// 
+			this->label10->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->label10->AutoSize = true;
+			this->label10->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label10->Location = System::Drawing::Point(279, 234);
+			this->label10->Name = L"label10";
+			this->label10->Size = System::Drawing::Size(101, 31);
+			this->label10->TabIndex = 23;
+			this->label10->Text = L"label10";
+			this->label10->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->label10->Visible = false;
+			// 
+			// label11
+			// 
+			this->label11->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->label11->AutoSize = true;
+			this->label11->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label11->Location = System::Drawing::Point(458, 234);
+			this->label11->Name = L"label11";
+			this->label11->Size = System::Drawing::Size(101, 31);
+			this->label11->TabIndex = 24;
+			this->label11->Text = L"label11";
+			this->label11->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			this->label11->Visible = false;
+			// 
 			// LotoUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::Green;
-			this->ClientSize = System::Drawing::Size(706, 447);
+			this->ClientSize = System::Drawing::Size(874, 575);
+			this->Controls->Add(this->label11);
+			this->Controls->Add(this->label10);
 			this->Controls->Add(this->label9);
 			this->Controls->Add(this->checkBox1);
 			this->Controls->Add(this->label8);
@@ -973,6 +1029,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"LotoUI";
 			this->Text = L"LotoUI";
+			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += gcnew System::EventHandler(this, &LotoUI::LotoUI_Load);
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
@@ -1037,15 +1094,38 @@ private: System::ComponentModel::IContainer^ components;
 			c++;
 		}	
     }
+	private: void hide_ticket(System::Windows::Forms::DataGridView^ table) {
+		table->Rows->Clear();
+		table->Visible = false;
+	}
+	private: void show_ticket(System::Windows::Forms::DataGridView^ table) {
+		fill_ticket(table);
+		table->Visible = true;
+	}
     private: System::Void новаяИграToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
-		label1->Text =  gcnew String(std::to_string(*next++).data());
-			//next++;
-		fill_ticket(dataGridView1);
-		fill_ticket(dataGridView2);
-		fill_ticket(dataGridView3);
-		fill_ticket(dataGridView4);
-		fill_ticket(dataGridView5);
-		fill_ticket(dataGridView6);
+		this->Hide();
+		Gamers^ gamers = gcnew Gamers();
+		gamers->ShowDialog();
+		this->Show();
+
+		for each (unsigned v in kvs) {
+			v = 0;
+		}
+
+		nicks = gamers->players_names();
+		valid = gamers->valid_players();
+		
+
+		nums_in_viewved();
+		reshuffle();
+		//label1->Text =  gcnew String(std::to_string(*next++).data());
+			next++;
+		valid[0] == true ? show_ticket(dataGridView1) : hide_ticket(dataGridView1);
+		valid[1] == true ? show_ticket(dataGridView2) : hide_ticket(dataGridView2);
+		valid[2] == true ? show_ticket(dataGridView3) : hide_ticket(dataGridView3);
+		valid[3] == true ? show_ticket(dataGridView4) : hide_ticket(dataGridView4);
+		valid[4] == true ? show_ticket(dataGridView5) : hide_ticket(dataGridView5);
+		valid[5] == true ? show_ticket(dataGridView6) : hide_ticket(dataGridView6);
 
 		winning.fill({ 0 });
 
@@ -1054,30 +1134,41 @@ private: System::ComponentModel::IContainer^ components;
 		label1->Visible = true;
 		//label2->Visible = true;
 		label3->Visible = true;
+		label3->Text = nicks[0];
 		label4->Visible = true;
+		label4->Text = nicks[1];
 		label5->Visible = true;
+		label5->Text = nicks[2];
 		label6->Visible = true;
+		label6->Text = nicks[3];
 		label7->Visible = true;
+		label7->Text = nicks[4];
 		label8->Visible = true;
+		label8->Text = nicks[5];
 		label9->Visible = false;
-		dataGridView1->Visible = true;
-		dataGridView2->Visible = true;
-		dataGridView3->Visible = true;
-		dataGridView4->Visible = true;
-		dataGridView5->Visible = true;
-		dataGridView6->Visible = true;
+		label10->Visible = true;
+		label10->Text = "";
+		label11->Visible = true;
+		label10->Text = "";
+		//dataGridView1->Visible = true;
+		//dataGridView2->Visible = true;
+		//dataGridView3->Visible = true;
+		//dataGridView4->Visible = true;
+		//dataGridView5->Visible = true;
+		//dataGridView6->Visible = true;
 		button1->Visible = true;
     }
 	private: bool check_number(System::Windows::Forms::DataGridView^ table, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		return table->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString() == label1->Text;
 	}
+
 	private: void remove_cell(System::Windows::Forms::DataGridView^ table, System::Windows::Forms::DataGridViewCellEventArgs^ e, unsigned player) {
 		table->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = " ";
 
 		if (++winning[player - 1] == 15) {
 			button1->Visible = false;
 			label2->Visible = true;
-			label2->Text = gcnew String("Игрок " + player.ToString() + " победил!!!");
+			label2->Text = gcnew String("Игрок " + nicks[player - 1] + " победил!!!");
 		}
 
 		unsigned count = 0;
@@ -1089,7 +1180,7 @@ private: System::ComponentModel::IContainer^ components;
 
 		if (count == COLS) {
 			label9->Visible = true;
-			label9->Text = gcnew String("Игрок " + player.ToString() + " : Квартира");
+			label9->Text = gcnew String("Игрок " + nicks[player - 1] + " : " + (kvs[player - 1] == 2 ? "Двойная К" : "к") + "вартира");
 		}
 	}
 
@@ -1124,8 +1215,46 @@ private: System::ComponentModel::IContainer^ components;
 		remove_cell(dataGridView6, e, 6);
 	}
 
+	
+	private: std::string get_substr(std::array<int, 5>::iterator it_begin, std::array<int, 5>::iterator it_end) {
+		std::string str_t;
+		while (it_begin != it_end) {
+			*it_begin == 0 ? str_t += "   " : str_t += std::to_string(*it_begin) + " ";
+			it_begin++;
+		}
+
+		return str_t;
+	}
+	private: void nums_in_viewved() {
+		std::string str_t;
+
+		std::ptrdiff_t diff = next - numbers_t.begin();
+		std::ptrdiff_t diff_end = numbers_t.end() - next;
+		std::array<int, 5> nums = { 0 };
+
+		if (diff < 2) {
+			std::copy(next, next + 3 + diff, nums.begin() + (2 - diff));
+		}
+		else if (diff_end < 3) {
+			std::copy(next, next + 3 + (3 - diff), nums.begin());
+		}
+		else {
+			std::copy(next, next + 5, nums.begin());
+		}	
+
+		/*for (auto v : nums) {
+			v == 0 ? str_t += "   " : str_t += std::to_string(v) + " ";
+		}*/
+
+		label10->Text = gcnew String(get_substr(nums.begin(), nums.begin() + 2).data());
+		label11->Text = gcnew String(get_substr(nums.begin() + 3, nums.end()).data());
+		label1->Text = gcnew String(std::to_string(nums[2]).data());
+
+	}
+
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		label1->Text = gcnew String(std::to_string(*next).data());
+		//label1->Text = gcnew String(std::to_string(*next).data());
+		nums_in_viewved();
 		if (next != (numbers_t.end() - 1)) {
 			next++;
 		}
@@ -1163,7 +1292,7 @@ private: System::ComponentModel::IContainer^ components;
 				if (++winning[player - 1] == 15) {
 					button1->Visible = false;
 					label2->Visible = true;
-					label2->Text = gcnew String("Игрок " + player.ToString() + " победил!!!");
+					label2->Text = gcnew String("Игрок " + nicks[player - 1] + " победил!!!");
 					timer2->Stop();
 					checkBox1->Checked = false;
 				}
@@ -1176,8 +1305,10 @@ private: System::ComponentModel::IContainer^ components;
 				}
 
 				if (count == COLS) {
+					kvs[player - 1]++;
+					if (kvs[player - 1] == 3) break;
 					label9->Visible = true;
-					label9->Text = gcnew String("Игрок " + player.ToString() + " : Квартира");
+					label9->Text = gcnew String("Игрок " + nicks[player - 1] + " : " + (kvs[player - 1] == 2 ? "Двойная к" : "К") + "вартира");
 				}
 
 				break;
@@ -1187,14 +1318,33 @@ private: System::ComponentModel::IContainer^ components;
 
 	}
 	private: System::Void timer2_Tick(System::Object^ sender, System::EventArgs^ e) {
-		label1->Text = gcnew String(std::to_string(*next).data());
+		//label1->Text = gcnew String(std::to_string(*next).data());
 
-		remove_auto(dataGridView1, 1);
-		remove_auto(dataGridView2, 2);
-		remove_auto(dataGridView3, 3);
-		remove_auto(dataGridView4, 4);
-		remove_auto(dataGridView5, 5);
-		remove_auto(dataGridView6, 6);
+		nums_in_viewved();
+
+		/*std::ptrdiff_t diff = next - numbers_t.begin();
+		std::ptrdiff_t diff_end = numbers_t.end() - next;
+		std::array<int, 5> nums = {0};
+
+		if (diff < 2) {
+			std::copy(next, next + 3 + diff, nums.begin() + (2 - diff));
+		}
+		else if (diff_end < 3) {
+			std::copy(next, next + 3 + (3 - diff), nums.begin());
+		}
+		else {
+			std::copy(next, next + 5, nums.begin());
+		}*/
+
+		
+		
+
+		if (valid[0] == true) remove_auto(dataGridView1, 1);
+		if (valid[1] == true) remove_auto(dataGridView2, 2);
+		if (valid[2] == true) remove_auto(dataGridView3, 3);
+		if (valid[3] == true) remove_auto(dataGridView4, 4);
+		if (valid[4] == true) remove_auto(dataGridView5, 5);
+		if (valid[5] == true) remove_auto(dataGridView6, 6);
 		
 		if (next != (numbers_t.end() - 1)) {
 			next++;

@@ -121,14 +121,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Gamers.cpp" />
     <ClCompile Include="LotoUI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Gamers.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="LotoUI.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Gamers.resx">
+      <DependentUpon>Gamers.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LotoUI.resx">
       <DependentUpon>LotoUI.h</DependentUpon>
     </EmbeddedResource>
