@@ -28,14 +28,32 @@ namespace Vadila {
 	std::array<int, MAX_NUMBER>::iterator next;
 	std::array<unsigned, 6> winning;
 
+
 	/// <summary>
 	/// Сводка для LotoUI
 	/// </summary>
 	public ref class LotoUI : public System::Windows::Forms::Form
 	{
+	private: value struct Player {
+			DataGridView^ ticket;
+			Label^ name;
+			Label^ pay_label;
+			int pay;
+		};
 	private: array<bool>^ valid;
 	private: array<String^>^ nicks;
 	private: array<unsigned>^ kvs = gcnew array<unsigned>(6);
+	private: array<int>^ payds;
+	private: array<Player>^ ready_players =  gcnew array<Player>(6);
+	private: int num_of_active = 0;
+	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::Label^ label12;
+	private: System::Windows::Forms::Label^ label13;
+	private: System::Windows::Forms::Label^ label14;
+	private: System::Windows::Forms::Label^ label15;
+	private: System::Windows::Forms::Label^ label16;
+	private: System::Windows::Forms::Label^ label17;
+	private: int current_active;
 
 	private: void reshuffle() {
 		numbers_t.fill(0);
@@ -249,6 +267,13 @@ private: System::ComponentModel::IContainer^ components;
 			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->label11 = (gcnew System::Windows::Forms::Label());
+			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->label12 = (gcnew System::Windows::Forms::Label());
+			this->label13 = (gcnew System::Windows::Forms::Label());
+			this->label14 = (gcnew System::Windows::Forms::Label());
+			this->label15 = (gcnew System::Windows::Forms::Label());
+			this->label16 = (gcnew System::Windows::Forms::Label());
+			this->label17 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView2))->BeginInit();
@@ -903,7 +928,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->label6->AutoSize = true;
 			this->label6->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label6->Location = System::Drawing::Point(649, 311);
+			this->label6->Location = System::Drawing::Point(537, 311);
 			this->label6->Name = L"label6";
 			this->label6->Size = System::Drawing::Size(83, 25);
 			this->label6->TabIndex = 18;
@@ -916,7 +941,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->label7->AutoSize = true;
 			this->label7->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label7->Location = System::Drawing::Point(741, 206);
+			this->label7->Location = System::Drawing::Point(629, 206);
 			this->label7->Name = L"label7";
 			this->label7->Size = System::Drawing::Size(83, 25);
 			this->label7->TabIndex = 19;
@@ -929,7 +954,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->label8->AutoSize = true;
 			this->label8->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label8->Location = System::Drawing::Point(649, 95);
+			this->label8->Location = System::Drawing::Point(537, 95);
 			this->label8->Name = L"label8";
 			this->label8->Size = System::Drawing::Size(83, 25);
 			this->label8->TabIndex = 20;
@@ -999,12 +1024,109 @@ private: System::ComponentModel::IContainer^ components;
 			this->label11->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			this->label11->Visible = false;
 			// 
+			// button2
+			// 
+			this->button2->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->button2->Location = System::Drawing::Point(334, 339);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(158, 23);
+			this->button2->TabIndex = 25;
+			this->button2->Text = L"Передать следующему";
+			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Visible = false;
+			this->button2->Click += gcnew System::EventHandler(this, &LotoUI::button2_Click);
+			// 
+			// label12
+			// 
+			this->label12->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->label12->AutoSize = true;
+			this->label12->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label12->Location = System::Drawing::Point(229, 95);
+			this->label12->Name = L"label12";
+			this->label12->Size = System::Drawing::Size(83, 25);
+			this->label12->TabIndex = 26;
+			this->label12->Text = L"Ставка: ";
+			this->label12->Visible = false;
+			// 
+			// label13
+			// 
+			this->label13->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->label13->AutoSize = true;
+			this->label13->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label13->Location = System::Drawing::Point(140, 207);
+			this->label13->Name = L"label13";
+			this->label13->Size = System::Drawing::Size(83, 25);
+			this->label13->TabIndex = 27;
+			this->label13->Text = L"Ставка: ";
+			this->label13->Visible = false;
+			// 
+			// label14
+			// 
+			this->label14->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->label14->AutoSize = true;
+			this->label14->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label14->Location = System::Drawing::Point(229, 311);
+			this->label14->Name = L"label14";
+			this->label14->Size = System::Drawing::Size(83, 25);
+			this->label14->TabIndex = 28;
+			this->label14->Text = L"Ставка: ";
+			this->label14->Visible = false;
+			// 
+			// label15
+			// 
+			this->label15->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->label15->AutoSize = true;
+			this->label15->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label15->Location = System::Drawing::Point(660, 311);
+			this->label15->Name = L"label15";
+			this->label15->Size = System::Drawing::Size(83, 25);
+			this->label15->TabIndex = 29;
+			this->label15->Text = L"Ставка: ";
+			this->label15->Visible = false;
+			// 
+			// label16
+			// 
+			this->label16->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->label16->AutoSize = true;
+			this->label16->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label16->Location = System::Drawing::Point(752, 206);
+			this->label16->Name = L"label16";
+			this->label16->Size = System::Drawing::Size(83, 25);
+			this->label16->TabIndex = 30;
+			this->label16->Text = L"Ставка: ";
+			this->label16->Visible = false;
+			// 
+			// label17
+			// 
+			this->label17->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->label17->AutoSize = true;
+			this->label17->Font = (gcnew System::Drawing::Font(L"Malgun Gothic", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label17->Location = System::Drawing::Point(660, 96);
+			this->label17->Name = L"label17";
+			this->label17->Size = System::Drawing::Size(83, 25);
+			this->label17->TabIndex = 31;
+			this->label17->Text = L"Ставка: ";
+			this->label17->Visible = false;
+			// 
 			// LotoUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::Green;
 			this->ClientSize = System::Drawing::Size(874, 575);
+			this->Controls->Add(this->label17);
+			this->Controls->Add(this->label16);
+			this->Controls->Add(this->label15);
+			this->Controls->Add(this->label14);
+			this->Controls->Add(this->label13);
+			this->Controls->Add(this->label12);
+			this->Controls->Add(this->button2);
 			this->Controls->Add(this->label11);
 			this->Controls->Add(this->label10);
 			this->Controls->Add(this->label9);
@@ -1098,12 +1220,18 @@ private: System::ComponentModel::IContainer^ components;
 		table->Rows->Clear();
 		table->Visible = false;
 	}
-	private: void show_ticket(System::Windows::Forms::DataGridView^ table) {
+	private: void show_ticket(System::Windows::Forms::DataGridView^ table, bool is_end) {
 		fill_ticket(table);
-		table->Visible = true;
+		if(is_end)
+			table->Visible = true;
 	}
     private: System::Void новаяИграToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+		Array::Clear(ready_players, 0, 6);
+
+		num_of_active = 0;
+
 		this->Hide();
+
 		Gamers^ gamers = gcnew Gamers();
 		gamers->ShowDialog();
 		this->Show();
@@ -1114,20 +1242,109 @@ private: System::ComponentModel::IContainer^ components;
 
 		nicks = gamers->players_names();
 		valid = gamers->valid_players();
+		payds = gamers->players_payds();
+
+		std::size_t idx = 0;
+		for each (int p in payds) {
+			if(p != -1)
+				ready_players[idx++].pay = p;
+		}
+
+		std::size_t active = 0;
+		for each (bool act in valid) {
+			if (act) active++;
+		}
+
+		if (2 > active)
+			return;
 		
 
 		nums_in_viewved();
 		reshuffle();
 		//label1->Text =  gcnew String(std::to_string(*next++).data());
 			next++;
-		valid[0] == true ? show_ticket(dataGridView1) : hide_ticket(dataGridView1);
-		valid[1] == true ? show_ticket(dataGridView2) : hide_ticket(dataGridView2);
-		valid[2] == true ? show_ticket(dataGridView3) : hide_ticket(dataGridView3);
-		valid[3] == true ? show_ticket(dataGridView4) : hide_ticket(dataGridView4);
-		valid[4] == true ? show_ticket(dataGridView5) : hide_ticket(dataGridView5);
-		valid[5] == true ? show_ticket(dataGridView6) : hide_ticket(dataGridView6);
+
+		std::size_t index = 0;
+		if (valid[0]) {
+			show_ticket(dataGridView1, false);
+			ready_players[index].ticket = dataGridView1;
+			label12->Visible = true;
+			label12->Text = "Ставка:  " + ready_players[index].pay;
+			ready_players[index++].name = label3;
+			
+			++num_of_active;
+		}
+		else {
+			hide_ticket(dataGridView1);
+			label12->Visible = false;
+		}
+		if (valid[1]) { 
+			show_ticket(dataGridView2, false);
+			ready_players[index].ticket = dataGridView2;
+			label13->Visible = true;
+			label13->Text = "Ставка:  " + ready_players[index].pay;
+			ready_players[index++].name = label4;
+			++num_of_active;
+		} 
+		else {
+			hide_ticket(dataGridView2);
+			label13->Visible = false;
+		}
+		if (valid[2]) {
+			show_ticket(dataGridView3, false);
+			ready_players[index].ticket = dataGridView3;
+			label14->Visible = true;
+			label14->Text = "Ставка:  " + ready_players[index].pay;
+			ready_players[index++].name = label5;
+			++num_of_active;
+		}
+		else {
+			hide_ticket(dataGridView3);
+			label14->Visible = false;
+		}
+		if (valid[3]) {
+			show_ticket(dataGridView4, false);
+			ready_players[index].ticket = dataGridView4;
+			label15->Visible = true;
+			label15->Text = "Ставка:  " + ready_players[index].pay;
+			ready_players[index++].name = label6;
+			++num_of_active;
+		}
+		else {
+			hide_ticket(dataGridView4);
+			label15->Visible = false;
+		}
+		if (valid[4]) {
+			show_ticket(dataGridView5, false);
+			ready_players[index].ticket = dataGridView5;
+			label16->Visible = true;
+			label16->Text = "Ставка:  " + ready_players[index].pay;
+			ready_players[index++].name = label7;
+			++num_of_active;
+		}
+		else {
+			hide_ticket(dataGridView5);
+			label16->Visible = false;
+		}
+		if (valid[5]) {
+			show_ticket(dataGridView6, false);
+			ready_players[index].ticket = dataGridView6;
+			label17->Visible = true;
+			label17->Text = "Ставка:  " + ready_players[index].pay;
+			ready_players[index++].name = label8;
+			++num_of_active;
+		}
+		else {
+			hide_ticket(dataGridView6);
+			label17->Visible = false;
+		}
+
 
 		winning.fill({ 0 });
+
+		current_active = 0;
+		show_ticket(ready_players[current_active].ticket, true);
+		ready_players[current_active].name->ForeColor = Color::Red;
 
 		checkBox1->Visible = true;
 
@@ -1150,25 +1367,51 @@ private: System::ComponentModel::IContainer^ components;
 		label10->Text = "";
 		label11->Visible = true;
 		label10->Text = "";
-		//dataGridView1->Visible = true;
-		//dataGridView2->Visible = true;
-		//dataGridView3->Visible = true;
-		//dataGridView4->Visible = true;
-		//dataGridView5->Visible = true;
-		//dataGridView6->Visible = true;
 		button1->Visible = true;
+		button2->Visible = true;
     }
-	private: bool check_number(System::Windows::Forms::DataGridView^ table, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+
+	private: int prize() {
+		int sum = 0;
+		for each (int v in payds) {
+			if (v == -1)
+				break;
+			sum += v;
+		}
+
+		return sum;
+	}
+
+	private: bool check_number(Windows::Forms::DataGridView^ table, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		return table->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value->ToString() == label1->Text;
 	}
 
+	private: void show_all() {
+		ready_players[current_active].name->ForeColor = Color::Black;
+		for each (Player p in ready_players) {
+			if (p.ticket == nullptr)
+				break;
+			p.ticket->Visible = true;
+		}
+	}
+	private: void hide_all() {
+
+		for each (Player p in ready_players) {
+			if (p.ticket == nullptr)
+				break;
+			p.ticket->Visible = false;
+		}
+		ready_players[current_active].name->ForeColor = Color::Red;
+		ready_players[current_active].ticket->Visible = true;
+	}
 	private: void remove_cell(System::Windows::Forms::DataGridView^ table, System::Windows::Forms::DataGridViewCellEventArgs^ e, unsigned player) {
 		table->Rows[e->RowIndex]->Cells[e->ColumnIndex]->Value = " ";
 
 		if (++winning[player - 1] == 15) {
 			button1->Visible = false;
 			label2->Visible = true;
-			label2->Text = gcnew String("Игрок " + nicks[player - 1] + " победил!!!");
+			show_all();
+			label2->Text = gcnew String("Игрок " + nicks[player - 1] + " победил!!! Выигрыш:  " + prize());
 		}
 
 		unsigned count = 0;
@@ -1184,35 +1427,48 @@ private: System::ComponentModel::IContainer^ components;
 		}
 	}
 
+	private: void switch_user() {
+		ready_players[current_active].ticket->Visible = false;
+		ready_players[current_active].name->ForeColor = Color::Black;
+		current_active = ++current_active % num_of_active;
+		ready_players[current_active].ticket->Visible = true;
+		ready_players[current_active].name->ForeColor = Color::Red;
+	}
 	private: System::Void dataGridView1_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		if (!check_number(dataGridView1, e))
 			return;
 		remove_cell(dataGridView1, e, 1);
+		switch_user();
 	}
 	private: System::Void dataGridView2_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		if (!check_number(dataGridView2, e))
 			return;
 		remove_cell(dataGridView2, e, 2);
+		switch_user();
 	}
 	private: System::Void dataGridView3_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		if (!check_number(dataGridView3, e))
 			return;
 		remove_cell(dataGridView3, e, 3);
+		switch_user();
 	}
 	private: System::Void dataGridView4_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		if (!check_number(dataGridView4, e))
 			return;
 		remove_cell(dataGridView4, e, 4);
+		switch_user();
 	}
 	private: System::Void dataGridView5_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		if (!check_number(dataGridView5, e))
 			return;
 		remove_cell(dataGridView5, e, 5);
+		switch_user();
 	}
 	private: System::Void dataGridView6_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
 		if (!check_number(dataGridView6, e))
 			return;
 		remove_cell(dataGridView6, e, 6);
+		switch_user();
 	}
 
 	
@@ -1268,10 +1524,14 @@ private: System::ComponentModel::IContainer^ components;
 	private: System::Void checkBox1_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		if (checkBox1->Checked) {
 			button1->Visible = false;
+			show_all();
+			button2->Visible = false;
 			timer2->Start();
 		}
 		else {
 			button1->Visible = true;
+			button2->Visible = true;
+			hide_all();
 			timer2->Stop();
 		}
 	}
@@ -1292,7 +1552,7 @@ private: System::ComponentModel::IContainer^ components;
 				if (++winning[player - 1] == 15) {
 					button1->Visible = false;
 					label2->Visible = true;
-					label2->Text = gcnew String("Игрок " + nicks[player - 1] + " победил!!!");
+					label2->Text = gcnew String("Игрок " + nicks[player - 1] + " победил!!! Выигрыш:  " + prize());
 					timer2->Stop();
 					checkBox1->Checked = false;
 				}
@@ -1355,5 +1615,8 @@ private: System::ComponentModel::IContainer^ components;
 			button1->Visible = false;
 		}
 	}
+private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+	switch_user();
+}
 };
 }
