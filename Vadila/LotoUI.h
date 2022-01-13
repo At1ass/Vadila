@@ -53,6 +53,7 @@ namespace Vadila {
 	private: System::Windows::Forms::Label^ label15;
 	private: System::Windows::Forms::Label^ label16;
 	private: System::Windows::Forms::Label^ label17;
+	private: System::Windows::Forms::Label^ label18;
 	private: int current_active;
 
 	private: void reshuffle() {
@@ -274,6 +275,7 @@ private: System::ComponentModel::IContainer^ components;
 			this->label15 = (gcnew System::Windows::Forms::Label());
 			this->label16 = (gcnew System::Windows::Forms::Label());
 			this->label17 = (gcnew System::Windows::Forms::Label());
+			this->label18 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView2))->BeginInit();
@@ -1114,12 +1116,22 @@ private: System::ComponentModel::IContainer^ components;
 			this->label17->Text = L"Ñòàâêà: ";
 			this->label17->Visible = false;
 			// 
+			// label18
+			// 
+			this->label18->AutoSize = true;
+			this->label18->Location = System::Drawing::Point(542, 59);
+			this->label18->Name = L"label18";
+			this->label18->Size = System::Drawing::Size(41, 13);
+			this->label18->TabIndex = 32;
+			this->label18->Text = L"label18";
+			// 
 			// LotoUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::Green;
 			this->ClientSize = System::Drawing::Size(874, 575);
+			this->Controls->Add(this->label18);
 			this->Controls->Add(this->label17);
 			this->Controls->Add(this->label16);
 			this->Controls->Add(this->label15);
@@ -1225,6 +1237,42 @@ private: System::ComponentModel::IContainer^ components;
 		if(is_end)
 			table->Visible = true;
 	}
+	private: void nums_in_viewved() {
+		std::string str_t;
+
+		std::ptrdiff_t diff = next - numbers_t.begin();
+		std::ptrdiff_t diff_end = numbers_t.end() - next;
+		std::array<int, 5> nums = { 0 };
+
+		if (diff_end == 4) {
+			std::string h;
+		}
+
+		if (diff < 2) {
+			std::copy(next - diff, next + 3, nums.begin() + (2 - diff));
+		}
+		else if (diff_end < 3) {
+				std::copy(next - 2, next + diff_end, nums.begin());
+		}
+		else {
+			std::copy(next - 2, next + 3, nums.begin());
+		}
+
+		std::reverse(nums.begin(), nums.end());
+
+		label18->Text = "";
+		for (auto v : nums) {
+			label18->Text += v.ToString() + " ";
+		}
+		/*for (auto v : nums) {
+			v == 0 ? str_t += "   " : str_t += std::to_string(v) + " ";
+		}*/
+
+		label10->Text = gcnew String(get_substr(nums.begin(), nums.begin() + 2).data());
+		label11->Text = gcnew String(get_substr(nums.begin() + 3, nums.end()).data());
+		label1->Text = gcnew String(std::to_string(nums[2]).data());
+
+	}
     private: System::Void íîâàÿÈãðàToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 		Array::Clear(ready_players, 0, 6);
 
@@ -1258,11 +1306,11 @@ private: System::ComponentModel::IContainer^ components;
 		if (2 > active)
 			return;
 		
-
-		nums_in_viewved();
 		reshuffle();
+		nums_in_viewved();
+		
 		//label1->Text =  gcnew String(std::to_string(*next++).data());
-			next++;
+		next++;
 
 		std::size_t index = 0;
 		if (valid[0]) {
@@ -1364,9 +1412,9 @@ private: System::ComponentModel::IContainer^ components;
 		label8->Text = nicks[5];
 		label9->Visible = false;
 		label10->Visible = true;
-		label10->Text = "";
+		//label10->Text = "";
 		label11->Visible = true;
-		label10->Text = "";
+		//label10->Text = "";
 		button1->Visible = true;
 		button2->Visible = true;
     }
@@ -1475,43 +1523,17 @@ private: System::ComponentModel::IContainer^ components;
 	private: std::string get_substr(std::array<int, 5>::iterator it_begin, std::array<int, 5>::iterator it_end) {
 		std::string str_t;
 		while (it_begin != it_end) {
-			*it_begin == 0 ? str_t += "   " : str_t += std::to_string(*it_begin) + " ";
+			str_t += *it_begin == 0 ? "   " : std::to_string(*it_begin) + " ";
 			it_begin++;
 		}
-
 		return str_t;
 	}
-	private: void nums_in_viewved() {
-		std::string str_t;
-
-		std::ptrdiff_t diff = next - numbers_t.begin();
-		std::ptrdiff_t diff_end = numbers_t.end() - next;
-		std::array<int, 5> nums = { 0 };
-
-		if (diff < 2) {
-			std::copy(next, next + 3 + diff, nums.begin() + (2 - diff));
-		}
-		else if (diff_end < 3) {
-			std::copy(next, next + 3 + (3 - diff), nums.begin());
-		}
-		else {
-			std::copy(next, next + 5, nums.begin());
-		}	
-
-		/*for (auto v : nums) {
-			v == 0 ? str_t += "   " : str_t += std::to_string(v) + " ";
-		}*/
-
-		label10->Text = gcnew String(get_substr(nums.begin(), nums.begin() + 2).data());
-		label11->Text = gcnew String(get_substr(nums.begin() + 3, nums.end()).data());
-		label1->Text = gcnew String(std::to_string(nums[2]).data());
-
-	}
+	
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		//label1->Text = gcnew String(std::to_string(*next).data());
 		nums_in_viewved();
-		if (next != (numbers_t.end() - 1)) {
+		if (next != (numbers_t.end())) {
 			next++;
 		}
 		else {
@@ -1617,6 +1639,8 @@ private: System::ComponentModel::IContainer^ components;
 	}
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 	switch_user();
+}
+private: System::Void label9_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }
